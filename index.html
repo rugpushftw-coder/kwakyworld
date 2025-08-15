@@ -134,36 +134,37 @@
       background: linear-gradient(180deg, #fff4cd, #ffe6a2); border:1px solid #ffd76c;
     }
 
-    /* ======= NEW: Gallery (grid, medium) ======= */
-    #gallery .gallery-wrap{
-      max-width: 980px;
-      margin: 14px auto 0;
+    /* ===== KWAKY CAROUSEL (3 visibles : centre normal, côtés plus petits) ===== */
+    .kwak-carousel{ max-width: 980px; margin: 14px auto 0; position: relative; }
+    .kwak-viewport{ overflow: visible; }
+    .kwak-track{
+      display:flex; align-items:center; justify-content:center; gap:12px;
+      user-select:none;
     }
-    .gallery-grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+    .kwak-slide{
+      background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow-1);
+      overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease, flex-basis .18s ease;
+      cursor: zoom-in;
     }
-    @media (max-width: 980px){
-      .gallery-grid{ grid-template-columns: repeat(2, 1fr); }
+    .kwak-slide img{ width:100%; height:auto; display:block; object-fit:contain; }
+    .kwak-caption{ font-size:13px; color:var(--muted); padding:8px 10px 10px; text-align:center; border-top:1px solid var(--line); background:#fff; }
+
+    /* tailles : centre / côtés */
+    .kwak-slide.side{ flex: 0 0 30%; transform: scale(.9); opacity:.85; }
+    .kwak-slide.current{ flex: 0 0 40%; transform: scale(1); opacity:1; }
+
+    /* flèches */
+    .kwak-nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:44px; height:44px; border-radius:999px; border:1px solid var(--line);
+      background:#fff; color:#0b1220; display:grid; place-items:center; font-size:22px;
+      box-shadow:var(--shadow-1); cursor:pointer; line-height:1;
     }
-    @media (max-width: 640px){
-      .gallery-grid{ grid-template-columns: 1fr; }
-    }
-    .gallery-item{
-      background:#fff; border:1px solid var(--line); border-radius:12px;
-      box-shadow: var(--shadow-1); overflow:hidden; cursor: zoom-in;
-      display:flex; align-items:center; justify-content:center; padding:8px;
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-    .gallery-item:hover{ transform:translateY(-2px); box-shadow:0 16px 50px rgba(10,20,60,.12); }
-    .gallery-item img{
-      max-width:100%; height:auto; display:block; object-fit:contain;
-    }
-    .gallery-caption{
-      font-size:13px; color:var(--muted); padding:8px 10px 10px; text-align:center;
-      border-top:1px solid var(--line); background:#fff;
-    }
+    .kwak-prev{ left:-18px; }
+    .kwak-next{ right:-18px; }
+    .kwak-nav:hover{ filter:brightness(.98); }
+    .kwak-nav:active{ transform:translateY(-50%) scale(.98); }
 
     /* Lightbox */
     .lightbox{
@@ -182,8 +183,8 @@
     .lb-close, .lb-prev, .lb-next{
       position:absolute; top:50%; transform:translateY(-50%);
       background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.25);
-      width:42px; height:42px; border-radius:999px; display:grid; place-items:center; cursor:pointer;
-      backdrop-filter: blur(6px);
+      width:44px; height:44px; border-radius:999px; display:grid; place-items:center; cursor:pointer;
+      backdrop-filter: blur(6px); line-height:1; font-size:22px;
     }
     .lb-close{ top:24px; right:24px; transform:none }
     .lb-prev{ left:24px }
@@ -202,9 +203,16 @@
       .nav-links{display:none}
       .grid{grid-template-columns:1fr 1fr}
       .badge{max-width:360px; margin:0 auto}
+
+      .kwak-prev{ left:-6px } .kwak-next{ right:-6px }
+      .kwak-slide.side{ flex-basis: 28%; }
+      .kwak-slide.current{ flex-basis: 44%; }
     }
     @media (max-width: 640px){
       .grid{grid-template-columns:1fr}
+      /* Sur très petit écran, on montre surtout l'image centrale */
+      .kwak-slide.side{ display:none; }
+      .kwak-slide.current{ flex-basis: 96%; }
     }
   </style>
 </head>
@@ -267,39 +275,19 @@
       <p class="muted" style="margin-top:8px">* Source: a duck we trust.</p>
     </section>
 
-    <!-- ======= GALLERY (GRID + LIGHTBOX) ======= -->
+    <!-- ===== GALLERY (3 visible images carousel) ===== -->
     <section id="gallery" class="section">
       <h2>Kwaky sightings (gallery)</h2>
-      <p class="muted">Photos of Kwaky around the world. Click any photo to enlarge.</p>
+      <p class="muted">Always three: center normal, sides smaller. Click any photo to enlarge.</p>
 
-      <div class="gallery-wrap">
-        <div class="gallery-grid" aria-label="Kwaky photos">
-          <!-- Remplace/ajoute librement tes images; ratio original conservé -->
-          <figure class="gallery-item">
-            <img src="images/GI8yfiBbAAAIHSf.jfif" alt="France" loading="lazy"/>
-          </figure>
-          <figure class="gallery-item">
-            <img src="images/GIiESQaaUAAUfoj.jfif" alt="Thailand" loading="lazy"/>
-          </figure>
-          <figure class="gallery-item">
-            <img src="images/GImjz50b0AAAjgB.jfif" alt="USA" loading="lazy"/>
-          </figure>
-          <figure class="gallery-item">
-            <img src="images/GJAPuO7bUAAmHtX.jfif" alt="Germany" loading="lazy"/>
-          </figure>
-          <figure class="gallery-item">
-            <img src="images/IMG-20240510-WA0000.jpg" alt="Netherlands" loading="lazy"/>
-          </figure>
-          <figure class="gallery-item">
-            <img src="images/GJwwEKlbcAAKTKO.jfif" alt="Belgium" loading="lazy"/>
-          </figure>
-          <figure class="gallery-item">
-            <img src="images/IMG-20240701-WA0003.jpg" alt="Netherlands" loading="lazy"/>
-          </figure>
-          <figure class="gallery-item">
-            <img src="images/GIw4sQ1bsAAU_7y.jfif" alt="Italy" loading="lazy"/>
-          </figure>
+      <div class="kwak-carousel" aria-label="Kwaky photos">
+        <button class="kwak-nav kwak-prev" aria-label="Previous">‹</button>
+
+        <div class="kwak-viewport">
+          <div class="kwak-track" id="kwak-track"><!-- filled by JS --></div>
         </div>
+
+        <button class="kwak-nav kwak-next" aria-label="Next">›</button>
       </div>
     </section>
 
@@ -370,55 +358,90 @@
     // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // GALLERY lightbox (grid version)
+    // === KWAKY CAROUSEL (3 visibles) + Lightbox + Autoplay ===
     (function(){
-      const grid = document.querySelector('.gallery-grid');
-      if(!grid) return;
-      const items = Array.from(grid.querySelectorAll('.gallery-item img'));
+      // 1) Liste d'images (reprend tes fichiers + légendes)
+      const slidesData = [
+        { src: 'images/GI8yfiBbAAAIHSf.jfif', caption: 'France' },
+        { src: 'images/GIiESQaaUAAUfoj.jfif', caption: 'Thailand' },
+        { src: 'images/GImjz50b0AAAjgB.jfif', caption: 'USA' },
+        { src: 'images/GJAPuO7bUAAmHtX.jfif', caption: 'Germany' },
+        { src: 'images/IMG-20240510-WA0000.jpg', caption: 'Netherlands' },
+        { src: 'images/GJwwEKlbcAAKTKO.jfif', caption: 'Belgium' },
+        { src: 'images/IMG-20240701-WA0003.jpg', caption: 'Netherlands' },
+        { src: 'images/GIw4sQ1bsAAU_7y.jfif', caption: 'Italy' }
+      ];
 
+      const track = document.getElementById('kwak-track');
+      const btnPrev = document.querySelector('.kwak-prev');
+      const btnNext = document.querySelector('.kwak-next');
+
+      let index = 1; // diapo centrale au démarrage
+      let timer = null;
+      const INTERVAL = 4000; // autoplay (ms)
+
+      function render(){
+        const total = slidesData.length;
+        const prev = (index - 1 + total) % total;
+        const next = (index + 1) % total;
+
+        track.innerHTML = '';
+        [[prev,'side'], [index,'current'], [next,'side']].forEach(([idx, cls])=>{
+          const fig = document.createElement('figure');
+          fig.className = `kwak-slide ${cls}`;
+          fig.innerHTML = `
+            <img src="${slidesData[idx].src}" alt="${slidesData[idx].caption}">
+            <figcaption class="kwak-caption">${slidesData[idx].caption}</figcaption>
+          `;
+          fig.querySelector('img').addEventListener('click', ()=> openLightbox(idx));
+          track.appendChild(fig);
+        });
+      }
+
+      function go(dir){ index = (index + dir + slidesData.length) % slidesData.length; render(); }
+      function start(){ stop(); timer = setInterval(()=> go(1), INTERVAL); }
+      function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+
+      btnPrev.addEventListener('click', ()=>{ stop(); go(-1); });
+      btnNext.addEventListener('click', ()=>{ stop(); go(1); });
+
+      // Lightbox elements
       const lb = document.getElementById('lightbox');
       const lbImg = lb.querySelector('.lb-img');
       const lbCaption = lb.querySelector('.lb-caption');
-      const btnClose = lb.querySelector('.lb-close');
-      const btnPrev = lb.querySelector('.lb-prev');
-      const btnNext = lb.querySelector('.lb-next');
+      const lbClose = lb.querySelector('.lb-close');
+      const lbPrev = lb.querySelector('.lb-prev');
+      const lbNext = lb.querySelector('.lb-next');
 
-      let i = 0;
+      let lbIndex = 0;
 
-      function open(index){
-        i = index;
-        render();
-        lb.classList.add('show');
-        lb.setAttribute('aria-hidden','false');
+      function openLightbox(i){
+        lbIndex = i; renderLB();
+        lb.classList.add('show'); lb.setAttribute('aria-hidden','false');
         document.addEventListener('keydown', onKey);
+        stop(); // pause carousel while enlarged
       }
-      function close(){
-        lb.classList.remove('show');
-        lb.setAttribute('aria-hidden','true');
+      function closeLightbox(){
+        lb.classList.remove('show'); lb.setAttribute('aria-hidden','true');
         document.removeEventListener('keydown', onKey);
+        start(); // resume autoplay on close
       }
-      function prev(){ i = (i - 1 + items.length) % items.length; render(); }
-      function next(){ i = (i + 1) % items.length; render(); }
-      function render(){
-        const img = items[i];
-        lbImg.src = img.src;
-        lbImg.alt = img.alt || '';
-        lbCaption.textContent = img.alt || '';
+      function prevLB(){ lbIndex = (lbIndex - 1 + slidesData.length) % slidesData.length; renderLB(); }
+      function nextLB(){ lbIndex = (lbIndex + 1) % slidesData.length; renderLB(); }
+      function renderLB(){
+        const it = slidesData[lbIndex];
+        lbImg.src = it.src; lbImg.alt = it.caption || '';
+        lbCaption.textContent = it.caption || '';
       }
       function onKey(e){
-        if(e.key === 'Escape') close();
-        if(e.key === 'ArrowLeft') prev();
-        if(e.key === 'ArrowRight') next();
+        if(e.key === 'Escape') closeLightbox();
+        if(e.key === 'ArrowLeft') prevLB();
+        if(e.key === 'ArrowRight') nextLB();
       }
-
-      items.forEach((img, idx)=>{
-        img.addEventListener('click', ()=> open(idx));
-      });
-
-      btnClose.addEventListener('click', close);
-      btnPrev.addEventListener('click', prev);
-      btnNext.addEventListener('click', next);
-      lb.addEventListener('click', (e)=> { if(e.target === lb) close(); });
+      lbClose.addEventListener('click', closeLightbox);
+      lbPrev.addEventListener('click', prevLB);
+      lbNext.addEventListener('click', nextLB);
+      lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
 
       // Swipe in lightbox
       let x0=null;
@@ -427,10 +450,14 @@
         if(x0===null) return;
         const dx = e.clientX - x0;
         const th = 60;
-        if(dx > th) prev();
-        else if(dx < -th) next();
+        if(dx > th) prevLB();
+        else if(dx < -th) nextLB();
         x0=null;
       });
+
+      // Init
+      render();
+      start();
     })();
   </script>
 </body>
