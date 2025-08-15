@@ -139,7 +139,12 @@
     .carousel .viewport{overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#fff; box-shadow:var(--shadow-1)}
     .carousel .track{display:flex; gap:0; padding:0; margin:0; list-style:none; transition:transform .35s ease}
     .carousel .slide{min-width:100%; position:relative; display:grid; grid-template-rows: auto auto}
-    .carousel img{width:100%; height:auto; display:block; aspect-ratio:16/9; object-fit:cover}
+    /* >>> Updated: natural ratio, no forced landscape */
+    .carousel img{
+      width:100%; height:auto; display:block;
+      object-fit:contain;                 /* évite le recadrage */
+      background:#fff;                    /* letterboxing propre */
+    }
     .carousel figcaption{padding:10px 12px; font-size:14px; color:var(--muted); background:#fff; border-top:1px solid var(--line)}
     .carousel .nav{
       position:absolute; top:50%; transform:translateY(-50%);
@@ -151,12 +156,20 @@
     .carousel .next{right:8px}
     .carousel .nav:hover{filter:brightness(.97)}
     .carousel .nav:active{transform:translateY(-50%) scale(.98)}
-    .carousel .dots{display:flex; gap:6px; justify-content:center; margin-top:10px}
+    /* >>> Updated: dots container will be auto-filled */
+    .carousel .dots{
+      display:flex; gap:6px; justify-content:center; margin-top:10px; flex-wrap:wrap;
+      max-width:100%;
+    }
     .carousel .dot{
       width:10px; height:10px; border-radius:999px; border:1px solid var(--line);
-      background:#fff; cursor:pointer;
+      background:#fff; cursor:pointer; flex:0 0 auto;
     }
     .carousel .dot.is-active{background:linear-gradient(180deg, var(--hero-from), var(--hero-to)); border-color:transparent}
+    /* Optional counter (hidden by default; enable if needed)
+    .carousel .counter{margin-top:6px; text-align:center; font-size:12px; color:var(--muted);}
+    */
+
     @media (prefers-color-scheme: dark){
       .carousel figcaption{background:#0f1426; color:#c9d4ff; border-top-color:rgba(255,255,255,.1)}
       .carousel .nav{background:rgba(10,20,60,.7); color:#eef3ff; border-color:rgba(255,255,255,.15)}
@@ -175,6 +188,31 @@
       background:#0d1326; color:#c9d4ff; text-align:center; padding:22px 20px 50px;
       border-top:1px solid rgba(255,255,255,.08);
     }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.85);
+    }
+    .lightbox.show{display:flex}
+    .lightbox .lb-img{
+      max-width:90vw; max-height:85vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.4);
+    }
+    .lightbox .lb-caption{
+      position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
+      max-width:90vw; color:#fff; opacity:.9; font-size:14px; text-align:center;
+      padding:0 10px;
+    }
+    .lb-close, .lb-prev, .lb-next{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.25);
+      width:42px; height:42px; border-radius:999px; display:grid; place-items:center; cursor:pointer;
+      backdrop-filter: blur(6px);
+    }
+    .lb-close{ top:24px; right:24px; transform:none }
+    .lb-prev{ left:24px }
+    .lb-next{ right:24px }
+    .lb-close:hover, .lb-prev:hover, .lb-next:hover{ background:rgba(255,255,255,.25) }
 
     /* Responsive */
     @media (max-width: 980px){
@@ -260,46 +298,46 @@
           <ul class="track">
             <!-- Slides: remplace src par tes vraies images -->
             <li class="slide is-active">
-              <img src="images/GI8yfiBbAAAIHSf.jfif" loading="lazy" />
+              <img src="images/GI8yfiBbAAAIHSf.jfif" loading="lazy" alt="France" />
               <figcaption>France</figcaption>
             </li>
             <li class="slide">
-              <img src="images/GIiESQaaUAAUfoj.jfif" alt="Kwaky in Bangkok" loading="lazy" />
+              <img src="images/GIiESQaaUAAUfoj.jfif" alt="Thailand" loading="lazy" />
               <figcaption>Thailand</figcaption>
             </li>
             <li class="slide">
-              <img src="images/GImjz50b0AAAjgB.jfif" alt="Kwaky in New York" loading="lazy" />
+              <img src="images/GImjz50b0AAAjgB.jfif" alt="USA" loading="lazy" />
               <figcaption>USA</figcaption>
             </li>
             <li class="slide">
-              <img src="images/GJAPuO7bUAAmHtX.jfif" alt="Kwaky in New York" loading="lazy" />
+              <img src="images/GJAPuO7bUAAmHtX.jfif" alt="Germany" loading="lazy" />
               <figcaption>Germany</figcaption>
             </li>
             <li class="slide">
-              <img src="images/IMG-20240510-WA0000.jpg" alt="Kwaky in New York" loading="lazy" />
+              <img src="images/IMG-20240510-WA0000.jpg" alt="Netherlands" loading="lazy" />
               <figcaption>Netherlands</figcaption>
             </li>
             <li class="slide">
-              <img src="images/GJwwEKlbcAAKTKO.jfif" alt="Kwaky in New York" loading="lazy" />
+              <img src="images/GJwwEKlbcAAKTKO.jfif" alt="Belgium" loading="lazy" />
               <figcaption>Belgium</figcaption>
             </li>
             <li class="slide">
-              <img src="images/IMG-20240701-WA0003.jpg" alt="Kwaky in New York" loading="lazy" />
+              <img src="images/IMG-20240701-WA0003.jpg" alt="Netherlands" loading="lazy" />
               <figcaption>Netherlands</figcaption>
             </li>
             <li class="slide">
-              <img src="images/GIw4sQ1bsAAU_7y.jfif" alt="Kwaky in New York" loading="lazy" />
+              <img src="images/GIw4sQ1bsAAU_7y.jfif" alt="Italy" loading="lazy" />
               <figcaption>Italy</figcaption>
             </li>
           </ul>
         </div>
         <button class="nav next" aria-label="Next slide">›</button>
 
-        <div class="dots" role="tablist" aria-label="Choose slide">
-          <button class="dot is-active" role="tab" aria-selected="true" aria-controls="slide-1">•</button>
-          <button class="dot" role="tab" aria-selected="false" aria-controls="slide-2">•</button>
-          <button class="dot" role="tab" aria-selected="false" aria-controls="slide-3">•</button>
-        </div>
+        <!-- >>> Updated: empty dots container; JS will fill it -->
+        <div class="dots" role="tablist" aria-label="Choose slide"></div>
+        <!-- Optionnel: compteur 
+        <div class="counter" aria-live="polite">1 / 8</div>
+        -->
       </div>
     </section>
 
@@ -357,11 +395,20 @@
     © <span id="y"></span> KWAKY — quietly everywhere.
   </footer>
 
+  <!-- Lightbox overlay (for enlarged images) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lb-close" aria-label="Close">×</button>
+    <button class="lb-prev" aria-label="Previous">‹</button>
+    <img class="lb-img" alt="" />
+    <button class="lb-next" aria-label="Next">›</button>
+    <div class="lb-caption"></div>
+  </div>
+
   <script>
     // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Carousel (autoplay + swipe + keyboard + dots)
+    // Carousel (autoplay + swipe + keyboard + auto-dots + lightbox)
     (function(){
       const carousels = document.querySelectorAll('.carousel');
       carousels.forEach(initCarousel);
@@ -371,11 +418,23 @@
         const slides = Array.from(root.querySelectorAll('.slide'));
         const prev = root.querySelector('.prev');
         const next = root.querySelector('.next');
-        const dots = Array.from(root.querySelectorAll('.dot'));
+        const dotsWrap = root.querySelector('.dots');
         const viewport = root.querySelector('.viewport');
 
         let index = 0, x0 = null, lock = false, timer = null;
         const INTERVAL = 3500;
+
+        // Build dots dynamically (handles any number of slides)
+        dotsWrap.innerHTML = '';
+        slides.forEach((_, i)=>{
+          const b = document.createElement('button');
+          b.className = 'dot' + (i===0?' is-active':'');
+          b.setAttribute('role','tab');
+          b.setAttribute('aria-selected', i===0 ? 'true' : 'false');
+          b.addEventListener('click', ()=> { go(i); start(); });
+          dotsWrap.appendChild(b);
+        });
+        const dots = Array.from(dotsWrap.querySelectorAll('.dot'));
 
         function update(){
           track.style.transform = `translateX(${-index * 100}%)`;
@@ -394,7 +453,6 @@
 
         prev.addEventListener('click', ()=> { go(index-1); start(); });
         next.addEventListener('click', ()=> { go(index+1); start(); });
-        dots.forEach((d,i)=> d.addEventListener('click', ()=> { go(i); start(); }));
 
         root.addEventListener('keydown', (e)=>{
           if(e.key === 'ArrowLeft') { go(index-1); start(); }
@@ -407,6 +465,7 @@
         root.addEventListener('focusin', stop);
         root.addEventListener('focusout', start);
 
+        // Touch / drag
         track.addEventListener('pointerdown', e=>{ x0 = e.clientX; lock = true; track.setPointerCapture(e.pointerId); stop(); });
         track.addEventListener('pointermove', e=>{
           if(!lock || x0===null) return;
@@ -425,17 +484,75 @@
           x0 = null; lock = false; start();
         });
 
+        // Click to open lightbox
+        track.addEventListener('click', (e)=>{
+          const img = e.target.closest('img');
+          if(!img) return;
+          openLightbox(slides, index, (newIndex)=>{ go(newIndex); start(); });
+          stop(); // pause while lightbox open
+        });
+
         window.addEventListener('resize', update);
 
         update();
         start();
       }
+
+      // Simple lightbox
+      function openLightbox(slides, startIndex=0, onCloseGo){
+        const lb = document.getElementById('lightbox');
+        const lbImg = lb.querySelector('.lb-img');
+        const lbCaption = lb.querySelector('.lb-caption');
+        const btnClose = lb.querySelector('.lb-close');
+        const btnPrev = lb.querySelector('.lb-prev');
+        const btnNext = lb.querySelector('.lb-next');
+
+        let i = startIndex;
+
+        function render(){
+          const current = slides[i].querySelector('img');
+          const captionEl = slides[i].querySelector('figcaption');
+          lbImg.src = current.getAttribute('src');
+          lbImg.alt = current.getAttribute('alt') || '';
+          lbCaption.textContent = captionEl ? captionEl.textContent : '';
+        }
+        function prev(){ i = (i - 1 + slides.length) % slides.length; render(); }
+        function next(){ i = (i + 1) % slides.length; render(); }
+        function close(){
+          lb.classList.remove('show');
+          lb.setAttribute('aria-hidden','true');
+          document.removeEventListener('keydown', onKey);
+          if(typeof onCloseGo === 'function') onCloseGo(i);
+        }
+        function onKey(e){
+          if(e.key === 'Escape') close();
+          if(e.key === 'ArrowLeft') prev();
+          if(e.key === 'ArrowRight') next();
+        }
+
+        btnClose.onclick = close;
+        btnPrev.onclick = prev;
+        btnNext.onclick = next;
+        lb.onclick = (e)=>{ if(e.target === lb) close(); };
+
+        // Swipe in lightbox
+        let x0=null; 
+        lbImg.addEventListener('pointerdown', e=>{ x0=e.clientX; lbImg.setPointerCapture(e.pointerId); });
+        lbImg.addEventListener('pointerup', e=>{
+          if(x0===null) return;
+          const dx = e.clientX - x0;
+          const threshold = 60;
+          if(dx > threshold) prev();
+          else if(dx < -threshold) next();
+          x0=null;
+        });
+
+        render();
+        lb.classList.add('show');
+        lb.setAttribute('aria-hidden','false');
+        document.addEventListener('keydown', onKey);
+      }
     })();
   </script>
 </body>
 </html>
-
-
-
-
-
