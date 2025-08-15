@@ -52,7 +52,7 @@
     .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
     .brand-logo{
       width:26px; height:26px; display:block; object-fit:contain; border-radius:6px;
-      background:#fff; /* si ton logo est transparent, ça le rend lisible sur le dégradé */
+      background:#fff;
     }
     .nav-links{display:flex; gap:22px; opacity:.9}
     .nav-links a{position:relative; font-weight:500}
@@ -99,8 +99,8 @@
     .hero-logo{
       width:58%; height:auto; display:block; object-fit:contain;
       filter: drop-shadow(0 6px 18px rgba(0,0,0,.25));
-      background:#fff; border-radius:14px; /* optionnel si ton logo est transparent */
-      padding:6px; /* léger mat pour l’isoler visuellement */
+      background:#fff; border-radius:14px;
+      padding:6px;
     }
 
     /* Main surface (cards on white) */
@@ -134,59 +134,35 @@
       background: linear-gradient(180deg, #fff4cd, #ffe6a2); border:1px solid #ffd76c;
     }
 
-    /* Carousel */
-    .carousel{position:relative; margin-top:18px}
-    .carousel .viewport{overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#fff; box-shadow:var(--shadow-1)}
-    .carousel .track{display:flex; gap:0; padding:0; margin:0; list-style:none; transition:transform .35s ease}
-    .carousel .slide{min-width:100%; position:relative; display:grid; grid-template-rows: auto auto}
-    /* >>> Updated: natural ratio, no forced landscape */
-    .carousel img{
-      width:100%; height:auto; display:block;
-      object-fit:contain;                 /* évite le recadrage */
-      background:#fff;                    /* letterboxing propre */
+    /* ======= NEW: Gallery (grid, medium) ======= */
+    #gallery .gallery-wrap{
+      max-width: 980px;
+      margin: 14px auto 0;
     }
-    .carousel figcaption{padding:10px 12px; font-size:14px; color:var(--muted); background:#fff; border-top:1px solid var(--line)}
-    .carousel .nav{
-      position:absolute; top:50%; transform:translateY(-50%);
-      background:rgba(255,255,255,.9); border:1px solid var(--line);
-      width:40px; height:40px; border-radius:999px; display:grid; place-items:center;
-      box-shadow:var(--shadow-1); cursor:pointer; font-size:22px; line-height:1; color:#0b1220;
+    .gallery-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
     }
-    .carousel .prev{left:8px}
-    .carousel .next{right:8px}
-    .carousel .nav:hover{filter:brightness(.97)}
-    .carousel .nav:active{transform:translateY(-50%) scale(.98)}
-    /* >>> Updated: dots container will be auto-filled */
-    .carousel .dots{
-      display:flex; gap:6px; justify-content:center; margin-top:10px; flex-wrap:wrap;
-      max-width:100%;
+    @media (max-width: 980px){
+      .gallery-grid{ grid-template-columns: repeat(2, 1fr); }
     }
-    .carousel .dot{
-      width:10px; height:10px; border-radius:999px; border:1px solid var(--line);
-      background:#fff; cursor:pointer; flex:0 0 auto;
+    @media (max-width: 640px){
+      .gallery-grid{ grid-template-columns: 1fr; }
     }
-    .carousel .dot.is-active{background:linear-gradient(180deg, var(--hero-from), var(--hero-to)); border-color:transparent}
-    /* Optional counter (hidden by default; enable if needed)
-    .carousel .counter{margin-top:6px; text-align:center; font-size:12px; color:var(--muted);}
-    */
-
-    @media (prefers-color-scheme: dark){
-      .carousel figcaption{background:#0f1426; color:#c9d4ff; border-top-color:rgba(255,255,255,.1)}
-      .carousel .nav{background:rgba(10,20,60,.7); color:#eef3ff; border-color:rgba(255,255,255,.15)}
-      .carousel .dot{background:#0f1426; border-color:rgba(255,255,255,.15)}
+    .gallery-item{
+      background:#fff; border:1px solid var(--line); border-radius:12px;
+      box-shadow: var(--shadow-1); overflow:hidden; cursor: zoom-in;
+      display:flex; align-items:center; justify-content:center; padding:8px;
+      transition: transform .15s ease, box-shadow .15s ease;
     }
-
-    /* FAQ */
-    details{
-      background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-top:10px;
-      box-shadow: var(--shadow-1);
+    .gallery-item:hover{ transform:translateY(-2px); box-shadow:0 16px 50px rgba(10,20,60,.12); }
+    .gallery-item img{
+      max-width:100%; height:auto; display:block; object-fit:contain;
     }
-    summary{cursor:pointer; font-weight:700}
-
-    /* Footer */
-    .footer{
-      background:#0d1326; color:#c9d4ff; text-align:center; padding:22px 20px 50px;
-      border-top:1px solid rgba(255,255,255,.08);
+    .gallery-caption{
+      font-size:13px; color:var(--muted); padding:8px 10px 10px; text-align:center;
+      border-top:1px solid var(--line); background:#fff;
     }
 
     /* Lightbox */
@@ -196,12 +172,12 @@
     }
     .lightbox.show{display:flex}
     .lightbox .lb-img{
-      max-width:90vw; max-height:85vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.4);
+      max-width:92vw; max-height:86vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.4);
+      background:#111;
     }
     .lightbox .lb-caption{
       position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
-      max-width:90vw; color:#fff; opacity:.9; font-size:14px; text-align:center;
-      padding:0 10px;
+      max-width:92vw; color:#fff; opacity:.9; font-size:14px; text-align:center; padding:0 12px;
     }
     .lb-close, .lb-prev, .lb-next{
       position:absolute; top:50%; transform:translateY(-50%);
@@ -214,6 +190,12 @@
     .lb-next{ right:24px }
     .lb-close:hover, .lb-prev:hover, .lb-next:hover{ background:rgba(255,255,255,.25) }
 
+    /* Footer */
+    .footer{
+      background:#0d1326; color:#c9d4ff; text-align:center; padding:22px 20px 50px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+
     /* Responsive */
     @media (max-width: 980px){
       .hero .container{grid-template-columns:1fr; text-align:center}
@@ -224,38 +206,6 @@
     @media (max-width: 640px){
       .grid{grid-template-columns:1fr}
     }
-
-    /* === Gallery sizing (medium) === */
-#gallery .carousel{
-  max-width: 900px;        /* largeur medium */
-  margin: 16px auto 0;     /* centré dans la section */
-}
-
-#gallery .viewport{
-  max-height: 380px;       /* hauteur max du viewport */
-  overflow: hidden;        /* évite que les images dépassent */
-  border-radius: 16px;
-}
-
-#gallery .carousel img{
-  height: auto;            /* garde le ratio naturel */
-  max-height: 360px;       /* cap la hauteur des images */
-  width: 100%;
-  object-fit: contain;     /* pas de recadrage, letterboxing si besoin */
-  background: #fff;
-}
-
-/* légères retouches pour compacter */
-#gallery .carousel .figcaption{ font-size: 13px; }
-#gallery .dots{ margin-top: 8px; }
-#gallery .nav{ width: 36px; height: 36px; }
-
-/* mobile: un peu plus compact */
-@media (max-width: 640px){
-  #gallery .carousel{ max-width: 100%; margin-top: 12px; }
-  #gallery .viewport{ max-height: 260px; }
-  #gallery .carousel img{ max-height: 240px; }
-}
   </style>
 </head>
 <body>
@@ -263,7 +213,6 @@
   <div class="header">
     <div class="nav">
       <div class="brand" aria-label="Kwaky">
-        <!-- Remplace ici par ton logo -->
         <img class="brand-logo" src="images/logo.png" alt="Kwaky logo">
         <span>KWAKY</span>
       </div>
@@ -287,7 +236,6 @@
       </div>
       <div class="hero-card">
         <div class="badge">
-          <!-- Et ici (image centrale du héros) -->
           <img class="hero-logo" src="images/logo.png" alt="Kwaky logo">
         </div>
         <p class="muted" style="margin:12px 0 0">“A small kwak for a duck, a giant meme for mankind.”</p>
@@ -319,57 +267,39 @@
       <p class="muted" style="margin-top:8px">* Source: a duck we trust.</p>
     </section>
 
-    <!-- GALLERY (CAROUSEL AUTOPLAY) -->
+    <!-- ======= GALLERY (GRID + LIGHTBOX) ======= -->
     <section id="gallery" class="section">
       <h2>Kwaky sightings (gallery)</h2>
-      <p class="muted">Photos of Kwaky around the world. Send yours. We’ll pretend it’s science.</p>
+      <p class="muted">Photos of Kwaky around the world. Click any photo to enlarge.</p>
 
-      <div class="carousel" aria-label="Kwaky photos">
-        <button class="nav prev" aria-label="Previous slide">‹</button>
-        <div class="viewport">
-          <ul class="track">
-            <!-- Slides: remplace src par tes vraies images -->
-            <li class="slide is-active">
-              <img src="images/GI8yfiBbAAAIHSf.jfif" loading="lazy" alt="France" />
-              <figcaption>France</figcaption>
-            </li>
-            <li class="slide">
-              <img src="images/GIiESQaaUAAUfoj.jfif" alt="Thailand" loading="lazy" />
-              <figcaption>Thailand</figcaption>
-            </li>
-            <li class="slide">
-              <img src="images/GImjz50b0AAAjgB.jfif" alt="USA" loading="lazy" />
-              <figcaption>USA</figcaption>
-            </li>
-            <li class="slide">
-              <img src="images/GJAPuO7bUAAmHtX.jfif" alt="Germany" loading="lazy" />
-              <figcaption>Germany</figcaption>
-            </li>
-            <li class="slide">
-              <img src="images/IMG-20240510-WA0000.jpg" alt="Netherlands" loading="lazy" />
-              <figcaption>Netherlands</figcaption>
-            </li>
-            <li class="slide">
-              <img src="images/GJwwEKlbcAAKTKO.jfif" alt="Belgium" loading="lazy" />
-              <figcaption>Belgium</figcaption>
-            </li>
-            <li class="slide">
-              <img src="images/IMG-20240701-WA0003.jpg" alt="Netherlands" loading="lazy" />
-              <figcaption>Netherlands</figcaption>
-            </li>
-            <li class="slide">
-              <img src="images/GIw4sQ1bsAAU_7y.jfif" alt="Italy" loading="lazy" />
-              <figcaption>Italy</figcaption>
-            </li>
-          </ul>
+      <div class="gallery-wrap">
+        <div class="gallery-grid" aria-label="Kwaky photos">
+          <!-- Remplace/ajoute librement tes images; ratio original conservé -->
+          <figure class="gallery-item">
+            <img src="images/GI8yfiBbAAAIHSf.jfif" alt="France" loading="lazy"/>
+          </figure>
+          <figure class="gallery-item">
+            <img src="images/GIiESQaaUAAUfoj.jfif" alt="Thailand" loading="lazy"/>
+          </figure>
+          <figure class="gallery-item">
+            <img src="images/GImjz50b0AAAjgB.jfif" alt="USA" loading="lazy"/>
+          </figure>
+          <figure class="gallery-item">
+            <img src="images/GJAPuO7bUAAmHtX.jfif" alt="Germany" loading="lazy"/>
+          </figure>
+          <figure class="gallery-item">
+            <img src="images/IMG-20240510-WA0000.jpg" alt="Netherlands" loading="lazy"/>
+          </figure>
+          <figure class="gallery-item">
+            <img src="images/GJwwEKlbcAAKTKO.jfif" alt="Belgium" loading="lazy"/>
+          </figure>
+          <figure class="gallery-item">
+            <img src="images/IMG-20240701-WA0003.jpg" alt="Netherlands" loading="lazy"/>
+          </figure>
+          <figure class="gallery-item">
+            <img src="images/GIw4sQ1bsAAU_7y.jfif" alt="Italy" loading="lazy"/>
+          </figure>
         </div>
-        <button class="nav next" aria-label="Next slide">›</button>
-
-        <!-- >>> Updated: empty dots container; JS will fill it -->
-        <div class="dots" role="tablist" aria-label="Choose slide"></div>
-        <!-- Optionnel: compteur 
-        <div class="counter" aria-live="polite">1 / 8</div>
-        -->
       </div>
     </section>
 
@@ -427,7 +357,7 @@
     © <span id="y"></span> KWAKY — quietly everywhere.
   </footer>
 
-  <!-- Lightbox overlay (for enlarged images) -->
+  <!-- Lightbox overlay -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <button class="lb-close" aria-label="Close">×</button>
     <button class="lb-prev" aria-label="Previous">‹</button>
@@ -440,152 +370,68 @@
     // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Carousel (autoplay + swipe + keyboard + auto-dots + lightbox)
+    // GALLERY lightbox (grid version)
     (function(){
-      const carousels = document.querySelectorAll('.carousel');
-      carousels.forEach(initCarousel);
+      const grid = document.querySelector('.gallery-grid');
+      if(!grid) return;
+      const items = Array.from(grid.querySelectorAll('.gallery-item img'));
 
-      function initCarousel(root){
-        const track = root.querySelector('.track');
-        const slides = Array.from(root.querySelectorAll('.slide'));
-        const prev = root.querySelector('.prev');
-        const next = root.querySelector('.next');
-        const dotsWrap = root.querySelector('.dots');
-        const viewport = root.querySelector('.viewport');
+      const lb = document.getElementById('lightbox');
+      const lbImg = lb.querySelector('.lb-img');
+      const lbCaption = lb.querySelector('.lb-caption');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev = lb.querySelector('.lb-prev');
+      const btnNext = lb.querySelector('.lb-next');
 
-        let index = 0, x0 = null, lock = false, timer = null;
-        const INTERVAL = 3500;
+      let i = 0;
 
-        // Build dots dynamically (handles any number of slides)
-        dotsWrap.innerHTML = '';
-        slides.forEach((_, i)=>{
-          const b = document.createElement('button');
-          b.className = 'dot' + (i===0?' is-active':'');
-          b.setAttribute('role','tab');
-          b.setAttribute('aria-selected', i===0 ? 'true' : 'false');
-          b.addEventListener('click', ()=> { go(i); start(); });
-          dotsWrap.appendChild(b);
-        });
-        const dots = Array.from(dotsWrap.querySelectorAll('.dot'));
-
-        function update(){
-          track.style.transform = `translateX(${-index * 100}%)`;
-          slides.forEach((s,i)=> s.classList.toggle('is-active', i===index));
-          dots.forEach((d,i)=> {
-            d.classList.toggle('is-active', i===index);
-            d.setAttribute('aria-selected', i===index ? 'true' : 'false');
-          });
-        }
-        function go(i){
-          index = (i + slides.length) % slides.length;
-          update();
-        }
-        function start(){ stop(); timer = setInterval(()=> go(index+1), INTERVAL); }
-        function stop(){ if(timer){ clearInterval(timer); timer = null; } }
-
-        prev.addEventListener('click', ()=> { go(index-1); start(); });
-        next.addEventListener('click', ()=> { go(index+1); start(); });
-
-        root.addEventListener('keydown', (e)=>{
-          if(e.key === 'ArrowLeft') { go(index-1); start(); }
-          if(e.key === 'ArrowRight'){ go(index+1); start(); }
-        });
-        root.setAttribute('tabindex','0');
-
-        root.addEventListener('mouseenter', stop);
-        root.addEventListener('mouseleave', start);
-        root.addEventListener('focusin', stop);
-        root.addEventListener('focusout', start);
-
-        // Touch / drag
-        track.addEventListener('pointerdown', e=>{ x0 = e.clientX; lock = true; track.setPointerCapture(e.pointerId); stop(); });
-        track.addEventListener('pointermove', e=>{
-          if(!lock || x0===null) return;
-          const dx = e.clientX - x0;
-          track.style.transition = 'none';
-          track.style.transform = `translateX(${-index*100 + (dx/viewport.clientWidth)*100}%)`;
-        });
-        track.addEventListener('pointerup', e=>{
-          track.style.transition = '';
-          if(x0===null) return;
-          const dx = e.clientX - x0;
-          const threshold = Math.min(120, viewport.clientWidth*0.15);
-          if(dx > threshold) go(index-1);
-          else if(dx < -threshold) go(index+1);
-          else update();
-          x0 = null; lock = false; start();
-        });
-
-        // Click to open lightbox
-        track.addEventListener('click', (e)=>{
-          const img = e.target.closest('img');
-          if(!img) return;
-          openLightbox(slides, index, (newIndex)=>{ go(newIndex); start(); });
-          stop(); // pause while lightbox open
-        });
-
-        window.addEventListener('resize', update);
-
-        update();
-        start();
-      }
-
-      // Simple lightbox
-      function openLightbox(slides, startIndex=0, onCloseGo){
-        const lb = document.getElementById('lightbox');
-        const lbImg = lb.querySelector('.lb-img');
-        const lbCaption = lb.querySelector('.lb-caption');
-        const btnClose = lb.querySelector('.lb-close');
-        const btnPrev = lb.querySelector('.lb-prev');
-        const btnNext = lb.querySelector('.lb-next');
-
-        let i = startIndex;
-
-        function render(){
-          const current = slides[i].querySelector('img');
-          const captionEl = slides[i].querySelector('figcaption');
-          lbImg.src = current.getAttribute('src');
-          lbImg.alt = current.getAttribute('alt') || '';
-          lbCaption.textContent = captionEl ? captionEl.textContent : '';
-        }
-        function prev(){ i = (i - 1 + slides.length) % slides.length; render(); }
-        function next(){ i = (i + 1) % slides.length; render(); }
-        function close(){
-          lb.classList.remove('show');
-          lb.setAttribute('aria-hidden','true');
-          document.removeEventListener('keydown', onKey);
-          if(typeof onCloseGo === 'function') onCloseGo(i);
-        }
-        function onKey(e){
-          if(e.key === 'Escape') close();
-          if(e.key === 'ArrowLeft') prev();
-          if(e.key === 'ArrowRight') next();
-        }
-
-        btnClose.onclick = close;
-        btnPrev.onclick = prev;
-        btnNext.onclick = next;
-        lb.onclick = (e)=>{ if(e.target === lb) close(); };
-
-        // Swipe in lightbox
-        let x0=null; 
-        lbImg.addEventListener('pointerdown', e=>{ x0=e.clientX; lbImg.setPointerCapture(e.pointerId); });
-        lbImg.addEventListener('pointerup', e=>{
-          if(x0===null) return;
-          const dx = e.clientX - x0;
-          const threshold = 60;
-          if(dx > threshold) prev();
-          else if(dx < -threshold) next();
-          x0=null;
-        });
-
+      function open(index){
+        i = index;
         render();
         lb.classList.add('show');
         lb.setAttribute('aria-hidden','false');
         document.addEventListener('keydown', onKey);
       }
+      function close(){
+        lb.classList.remove('show');
+        lb.setAttribute('aria-hidden','true');
+        document.removeEventListener('keydown', onKey);
+      }
+      function prev(){ i = (i - 1 + items.length) % items.length; render(); }
+      function next(){ i = (i + 1) % items.length; render(); }
+      function render(){
+        const img = items[i];
+        lbImg.src = img.src;
+        lbImg.alt = img.alt || '';
+        lbCaption.textContent = img.alt || '';
+      }
+      function onKey(e){
+        if(e.key === 'Escape') close();
+        if(e.key === 'ArrowLeft') prev();
+        if(e.key === 'ArrowRight') next();
+      }
+
+      items.forEach((img, idx)=>{
+        img.addEventListener('click', ()=> open(idx));
+      });
+
+      btnClose.addEventListener('click', close);
+      btnPrev.addEventListener('click', prev);
+      btnNext.addEventListener('click', next);
+      lb.addEventListener('click', (e)=> { if(e.target === lb) close(); });
+
+      // Swipe in lightbox
+      let x0=null;
+      lbImg.addEventListener('pointerdown', e=>{ x0=e.clientX; lbImg.setPointerCapture(e.pointerId); });
+      lbImg.addEventListener('pointerup', e=>{
+        if(x0===null) return;
+        const dx = e.clientX - x0;
+        const th = 60;
+        if(dx > th) prev();
+        else if(dx < -th) next();
+        x0=null;
+      });
     })();
   </script>
 </body>
 </html>
-
