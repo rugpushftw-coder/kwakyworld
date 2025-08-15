@@ -224,6 +224,38 @@
     @media (max-width: 640px){
       .grid{grid-template-columns:1fr}
     }
+
+    /* === Gallery sizing (medium) === */
+#gallery .carousel{
+  max-width: 900px;        /* largeur medium */
+  margin: 16px auto 0;     /* centré dans la section */
+}
+
+#gallery .viewport{
+  max-height: 380px;       /* hauteur max du viewport */
+  overflow: hidden;        /* évite que les images dépassent */
+  border-radius: 16px;
+}
+
+#gallery .carousel img{
+  height: auto;            /* garde le ratio naturel */
+  max-height: 360px;       /* cap la hauteur des images */
+  width: 100%;
+  object-fit: contain;     /* pas de recadrage, letterboxing si besoin */
+  background: #fff;
+}
+
+/* légères retouches pour compacter */
+#gallery .carousel .figcaption{ font-size: 13px; }
+#gallery .dots{ margin-top: 8px; }
+#gallery .nav{ width: 36px; height: 36px; }
+
+/* mobile: un peu plus compact */
+@media (max-width: 640px){
+  #gallery .carousel{ max-width: 100%; margin-top: 12px; }
+  #gallery .viewport{ max-height: 260px; }
+  #gallery .carousel img{ max-height: 240px; }
+}
   </style>
 </head>
 <body>
@@ -556,3 +588,4 @@
   </script>
 </body>
 </html>
+
