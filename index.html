@@ -25,6 +25,8 @@
       --shadow-1: 0 10px 30px rgba(10, 20, 60, .15);
       --shadow-2: 0 14px 50px rgba(10, 20, 60, .16);
       --max:1120px;
+      /* Hauteur fixe pour la zone image du carrousel (évite les sauts) */
+      --car-h: 360px;
     }
 
     *{box-sizing:border-box}
@@ -135,20 +137,35 @@
     }
 
     /* ===== KWAKY CAROUSEL (3 visibles : centre normal, côtés plus petits) ===== */
-    .kwak-carousel{ max-width: 980px; margin: 14px auto 0; position: relative; }
-    .kwak-viewport{ overflow: visible; }
+    .kwak-carousel{
+      max-width: 980px; margin: 14px auto 0; position: relative;
+      padding-inline: 56px;            /* réserve la place des flèches */
+    }
+    .kwak-viewport{
+      overflow: visible;
+      min-height: calc(var(--car-h) + 44px); /* image + caption => flèches restent centrées */
+    }
     .kwak-track{
       display:flex; align-items:center; justify-content:center; gap:12px;
       user-select:none;
     }
     .kwak-slide{
       background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow-1);
-      overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+      overflow:hidden; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start;
       transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease, flex-basis .18s ease;
       cursor: zoom-in;
     }
-    .kwak-slide img{ width:100%; height:auto; display:block; object-fit:contain; }
-    .kwak-caption{ font-size:13px; color:var(--muted); padding:8px 10px 10px; text-align:center; border-top:1px solid var(--line); background:#fff; }
+    .kwak-media{
+      width:100%; height: var(--car-h);
+      display:grid; place-items:center; background:#fff;
+    }
+    .kwak-slide img{
+      max-width:100%; max-height:100%; width:auto; height:auto; display:block; object-fit:contain;
+    }
+    .kwak-caption{
+      font-size:13px; color:var(--muted); padding:8px 10px 10px; text-align:center;
+      border-top:1px solid var(--line); background:#fff;
+    }
 
     /* tailles : centre / côtés */
     .kwak-slide.side{ flex: 0 0 30%; transform: scale(.9); opacity:.85; }
@@ -160,11 +177,13 @@
       width:44px; height:44px; border-radius:999px; border:1px solid var(--line);
       background:#fff; color:#0b1220; display:grid; place-items:center; font-size:22px;
       box-shadow:var(--shadow-1); cursor:pointer; line-height:1;
+      z-index: 10;                    /* au-dessus des images */
     }
-    .kwak-prev{ left:-18px; }
-    .kwak-next{ right:-18px; }
+    .kwak-prev{ left: 8px; }
+    .kwak-next{ right: 8px; }
     .kwak-nav:hover{ filter:brightness(.98); }
-    .kwak-nav:active{ transform:translateY(-50%) scale(.98); }
+    /* Pas de scale à :active -> évite tout déplacement */
+    .kwak-nav:active{ transform:translateY(-50%); }
 
     /* Lightbox */
     .lightbox{
@@ -204,15 +223,18 @@
       .grid{grid-template-columns:1fr 1fr}
       .badge{max-width:360px; margin:0 auto}
 
-      .kwak-prev{ left:-6px } .kwak-next{ right:-6px }
+      .kwak-carousel{ padding-inline: 48px; }
+      .kwak-prev{ left:8px } .kwak-next{ right:8px }
       .kwak-slide.side{ flex-basis: 28%; }
       .kwak-slide.current{ flex-basis: 44%; }
+      :root{ --car-h: 320px; }
     }
     @media (max-width: 640px){
       .grid{grid-template-columns:1fr}
-      /* Sur très petit écran, on montre surtout l'image centrale */
       .kwak-slide.side{ display:none; }
       .kwak-slide.current{ flex-basis: 96%; }
+      .kwak-carousel{ padding-inline: 40px; }
+      :root{ --car-h: 260px; }
     }
   </style>
 </head>
@@ -360,7 +382,7 @@
 
     // === KWAKY CAROUSEL (3 visibles) + Lightbox + Autoplay ===
     (function(){
-      // 1) Liste d'images (reprend tes fichiers + légendes)
+      // Liste d'images (tes fichiers + légendes)
       const slidesData = [
         { src: 'images/GI8yfiBbAAAIHSf.jfif', caption: 'France' },
         { src: 'images/GIiESQaaUAAUfoj.jfif', caption: 'Thailand' },
@@ -390,7 +412,9 @@
           const fig = document.createElement('figure');
           fig.className = `kwak-slide ${cls}`;
           fig.innerHTML = `
-            <img src="${slidesData[idx].src}" alt="${slidesData[idx].caption}">
+            <div class="kwak-media">
+              <img src="${slidesData[idx].src}" alt="${slidesData[idx].caption}">
+            </div>
             <figcaption class="kwak-caption">${slidesData[idx].caption}</figcaption>
           `;
           fig.querySelector('img').addEventListener('click', ()=> openLightbox(idx));
